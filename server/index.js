@@ -1,26 +1,39 @@
 // https://www.youtube.com/watch?v=keYFkLycaDg 
-// 39 mins
+// 55 mins
+import dotenv from 'dotenv'
+dotenv.config()
 import express from 'express'
 import cors from 'cors'
-import dotenv from 'dotenv'
 
 //importing routes
-import AuthRoutes from '../server/routes/AuthRoute.js'
+import AuthRoutes from './routes/AuthRoute.js'
 
-dotenv.config()
 const app = express(); 
 
-app.use = cors(); 
-app.use = express.json()
+//more detailed cors
+// // app.use(cors())
+// const corsOptions = {
+//   origin: 'http://localhost:3000', // assuming your React app runs on port 3000
+//   credentials: true,
+//   optionsSuccessStatus: 200
+// };
+
+app.use(cors());
+
+//more detailed cors
+// app.use(cors({
+//   origin: 'http://localhost:3000', // or whatever your client's URL is
+//   methods: ['GET', 'POST'],
+//   credentials: true
+// }));
+
+app.use(express.json())
 
 //use routes in app
-app.use('/api/auth', AuthRoutes); 
-
-
-
+app.use('/api/auth', AuthRoutes)
 
 const PORT = process.env.PORT; 
 
-const server = app.listen((PORT) => {
+const server = app.listen(PORT, () => {
   console.log(`SERVER RUNNING ON PORT:${PORT}`)
 })
