@@ -1,0 +1,46 @@
+# Dependencies
+client/node_modules/
+server/node_modules/
+.pnp
+.pnp.js
+
+# Testing
+/coverage
+client/package-lock.json
+server/package-lock.json
+client/yarn.lock
+server/yarn.lock
+
+# Next.js build output
+client/.next/
+out/
+
+# Production build output
+/build
+
+# Uploads directory (if applicable)
+server/uploads/
+
+# Miscellaneous files
+.DS_Store
+*.pem
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Local environment files
+.env*
+!.env.example  # Optionally include a sample env file
+
+# Vercel deployment files
+.vercel
+
+# Editor specific files (optional)
+*.swp  # Vim swap files
+*.sublime-workspace  # Sublime Text workspace files
+
+# OS generated files (optional)
+Thumbs.db  # Windows thumbnail cache
