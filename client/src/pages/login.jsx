@@ -3,7 +3,7 @@ import { firebaseAuth } from '../utils/FirebaseConfig.js';
 import axios from 'axios';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { useRouter } from 'next/router.js';
 import { useStateProvider } from '@/context/StateContext.jsx';
@@ -14,7 +14,16 @@ const login = () => {
   const router = useRouter();
 
   //setting state of user
-  const [{}, dispatch] = useStateProvider();
+  const [{userInfo, newUser}, dispatch] = useStateProvider();
+
+  //useEffect 
+  useEffect(() => {
+    console.log({userInfo, newUser})
+    if (userInfo?.id && !newUser) {
+      router.push('/')
+    }
+  }, [userInfo, newUser])
+  
   const handleLogin = async () => {
     try {
       const provider = new GoogleAuthProvider();
@@ -41,6 +50,23 @@ const login = () => {
           },
         });
         router.push('/onboarding');
+      } else {
+        dispatch({
+          type:reducerCases.SET_NEW_USER, 
+          newUser: true, 
+        }); 
+        const {id, name, email, profilePicture:profileImage, status } = data; 
+        dispatch({
+          type: reducerCases.SET_USER_INFO,
+          userInfo: {
+            id, 
+            name,
+            email, 
+            profileImage, 
+            status
+          },
+        });
+        router.push('/')
       }
     } catch (error) {
       console.error('Login error:', error.message);

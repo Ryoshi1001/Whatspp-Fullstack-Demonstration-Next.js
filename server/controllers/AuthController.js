@@ -20,3 +20,20 @@ export const checkUser = async (req, res, next) => {
     console.log(error.message);
   }
 };
+
+//controller for user onBoarding page
+export const onBoardUser = async (req, res, next) => {
+  try {
+    const {email, name, about, image:profilePicture} = req.body; 
+    if (!email || !name || !profilePicture) {
+      return res.send("Email, Name and Image are required.")
+    }
+    const prisma = getPrismaInstance()
+    await prisma.user.create({
+      data: { email, name, about, profilePicture }
+    })
+    return res.json({ ms: "Success new user added", status: true})
+  } catch (error) {
+    next(error)
+  }
+}

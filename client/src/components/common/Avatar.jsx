@@ -79,6 +79,7 @@ function Avatar({ type, image, setImage }) {
               priority={true}
               alt="avatar drawing"
               className="rounded-full"
+              sizes='sm'
               fill
             />
           </div>
@@ -98,7 +99,7 @@ function Avatar({ type, image, setImage }) {
         {type === 'xl' && (
           <div className="relative cursor-pointer">
             <div
-              className="h-60 w-60 z-0"
+              className="h-60 w-60 z-0 relative"
               onMouseEnter={() => setHover(true)}
               onMouseLeave={() => setHover(false)}
             >
