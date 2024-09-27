@@ -4,9 +4,10 @@ export default function Document() {
   return (
     <Html>
       <Head/>
-      <body>
+      <body className='bg-red-200'>
         <Main/>
         <NextScript/>
+        <div id='photo-picker-element'></div>
       </body>
     </Html>
   )
