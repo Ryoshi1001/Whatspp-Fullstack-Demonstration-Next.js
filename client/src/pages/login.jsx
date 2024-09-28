@@ -51,11 +51,7 @@ const login = () => {
         });
         router.push('/onboarding');
       } else {
-        dispatch({
-          type:reducerCases.SET_NEW_USER, 
-          newUser: true, 
-        }); 
-        const {id, name, email, profilePicture:profileImage, status } = data; 
+        const {id, name, email, profilePicture:profileImage, status } = data.data; 
         dispatch({
           type: reducerCases.SET_USER_INFO,
           userInfo: {

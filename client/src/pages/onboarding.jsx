@@ -16,12 +16,10 @@ const onboarding = () => {
   const [image, setImage] = useState('/default_avatar.png');
 
   useEffect(() => {
-    if (!newUser && !userInfo?.email) {
-      router.push('/login');
-    } else if (!newUser && userInfo?.email) {
+  if (userInfo?.email && !newUser) {
       router.push('/');
     }
-  }, [newUser, userInfo, router]);
+  }, [newUser, userInfo]);
 
   const onboardUserHandler = async () => {
     if (validateDetails()) {
@@ -42,7 +40,7 @@ const onboarding = () => {
           dispatch({
             type: reducerCases.SET_USER_INFO,
             userInfo: {
-              id: data.id, 
+              id: data.user.id, 
               name,
               email,
               profileImage: image,
