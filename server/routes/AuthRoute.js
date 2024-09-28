@@ -1,5 +1,5 @@
 import express from 'express'
-import { checkUser, onBoardUser } from '../controllers/AuthController.js';
+import { checkUser, getAllUsers, onBoardUser } from '../controllers/AuthController.js';
 
 const router = express.Router(); 
 
@@ -7,5 +7,7 @@ const router = express.Router();
 router.post('/check-user', checkUser); 
 //router for onboarding
 router.post('/onboard-user', onBoardUser)
+//router for getting all users in ChatContainer
+router.get('/get-contacts', getAllUsers)
 
 export default router; 
