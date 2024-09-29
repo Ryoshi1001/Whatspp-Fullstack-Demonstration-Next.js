@@ -1,9 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Avatar from '../common/Avatar'
+import { useStateProvider } from '@/context/StateContext'
+import { reducerCases } from '@/context/constants'
 
 const ChatListItem = ({data, isContactsPage = false}) => {
+  const [{userInfo, currentChatUser}, dispatch] = useStateProvider()
+
+  const handleContactClick = () => {
+      dispatch({
+        type: reducerCases.CHANGE_CURRENT_CHAT_USER, 
+        user: {...data}
+      })
+      dispatch({
+        type: reducerCases.SET_ALL_CONTACTS_PAGE, 
+      }) 
+  }
+
   return (
-    <div className={`flex cursor-pointer hover:bg-background-default-hover`}>
+    <div className={`flex cursor-pointer hover:bg-background-default-hover`}
+    onClick={handleContactClick}
+    >
       <div className='min-w-fit px-5 pt-3 pb-1'>
         <Avatar
         type="lg"
@@ -18,7 +34,7 @@ const ChatListItem = ({data, isContactsPage = false}) => {
         </div>
         <div className="flex border-b border-conversation-border pb-2 pt-1 pr-2">
           <div className="flex justify-between w-full">
-            <span className="text-secondary line-clamp-1 text-sm ">{data?.about}</span>
+            <span className="text-secondary line-clamp-1 text-sm ">{data?.about || "\u00A0"}</span>
           </div>
         </div>
       </div>

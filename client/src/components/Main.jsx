@@ -14,7 +14,8 @@ const Main = () => {
   //checking for userInfo in Main first because undefined in nested ChatList: problem with loading avatar in child component. Using method from Firebase: onAuthStateChanged(firebaseAth, ) like a useEffect Hook for Firebase.
   const router = useRouter();
   const [redirectLogin, setRedirectLogin] = useState(false);
-  const [{ userInfo }, dispatch] = useStateProvider();
+  const [{ userInfo, currentChatUser }, dispatch] = useStateProvider();
+  
 
   useEffect(() => {
     if (redirectLogin) {
@@ -72,8 +73,7 @@ const Main = () => {
     <>
       <div className="grid grid-cols-main w-screen h-screen max-h-screen max-w-screen overflow-hidden">
         <ChatList />
-        {/* <Empty /> */}
-        <Chat/>
+        {currentChatUser ? <Chat /> : <Empty /> }
       </div>
     </>
   );

@@ -79,7 +79,7 @@ function Avatar({ type, image, setImage }) {
               priority={true}
               alt="avatar drawing"
               className="rounded-full"
-              sizes='sm'
+              sizes='40px' //10*4 for retina displays
               fill
             />
           </div>
@@ -91,6 +91,7 @@ function Avatar({ type, image, setImage }) {
               src={image}
               alt="avatar drawing"
               className="rounded-full"
+              sizes='56px' //10*4 for retina displays
               fill
             />
           </div>
@@ -134,6 +135,7 @@ function Avatar({ type, image, setImage }) {
                 src={image}
                 alt="avatar drawing"
                 className="rounded-full"
+                sizes='240px' //10*4 for retina displays
                 fill
               />
             </div>
