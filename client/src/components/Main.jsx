@@ -6,7 +6,7 @@ import { useStateProvider } from '@/context/StateContext';
 import { onAuthStateChanged } from 'firebase/auth';
 import axios from 'axios';
 import { firebaseAuth } from '@/utils/FirebaseConfig';
-import { CHECK_USER_ROUTE } from '@/utils/ApiRoutes';
+import { CHECK_USER_ROUTE, GET_MESSAGES_ROUTE } from '@/utils/ApiRoutes';
 import { reducerCases } from '@/context/constants';
 import Chat from './Chat/Chat';
 
@@ -39,10 +39,8 @@ const Main = () => {
           if (!data.status) {
             router.push('/login');
           }
-          console.log("cions",  {data} );
 
           if (data.data) {
-            
             const {
               id,
               name,
@@ -62,12 +60,30 @@ const Main = () => {
             });
           }
         }
-
         }
       );
 
     return () => unsubscribe();
   }, [userInfo, dispatch]);
+
+ 
+  useEffect(() => {
+    const getMessages = async () => {
+      try {
+        const { data: { messages } } = await axios.get(`${GET_MESSAGES_ROUTE}/${userInfo.id}/${currentChatUser.id}`); 
+        dispatch({
+          type: reducerCases.SET_MESSAGES, 
+          messages
+        })
+      } catch (error) {
+        console.error("Error fetching messages:", error)
+      }
+    }
+    if (currentChatUser?.id && userInfo?.id) {
+        getMessages(); 
+    }
+  }, [currentChatUser])
+  
 
   return (
     <>

@@ -1,5 +1,5 @@
 // https://www.youtube.com/watch?v=keYFkLycaDg 
-// 4:10 mins
+// 4:49 mins
 import dotenv from 'dotenv'
 dotenv.config()
 import express from 'express'
@@ -34,7 +34,7 @@ app.use(express.json())
 //add routes for auth routes
 app.use('/api/auth', AuthRoutes)
 //add routes for messages
-app.use('api/messages', MessageRoutes)
+app.use('/api/messages', MessageRoutes)
 
 const PORT = process.env.PORT; 
 

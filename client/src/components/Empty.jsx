@@ -7,7 +7,7 @@ const Empty = () => {
   return (
     <>
     <div className='w-full  border-l border-conversation-border bg-panel-header-background flex flex-col h-[100vh] border-b-4 border-b-icon-green items-center justify-center'>
-      <Image src={"/whatsapp.gif"} alt='whatsapp drawing' width={300} height={300}/>
+      <Image src={"/whatsapp.gif"} alt='whatsapp drawing' width={300} height={300} priority={true}/>
     </div>
     <SearchBar/>
     <List/>

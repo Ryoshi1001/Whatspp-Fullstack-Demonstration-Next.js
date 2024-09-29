@@ -1,4 +1,6 @@
 import { useStateProvider } from '@/context/StateContext'
+import { ADD_MESSAGES_ROUTE } from '@/utils/ApiRoutes'
+import axios from 'axios'
 import React, { useState } from 'react'
 import { BsEmojiSmile } from 'react-icons/bs'
 import { FaMicrophone } from 'react-icons/fa'
@@ -8,8 +10,19 @@ const MessageBar = () => {
   //code for when clicking send btn in messageBar on bottom of app screen for text messages
   const [{userInfo, currentChatUser}, dispatch] = useStateProvider(); 
   const [message, setMessage] = useState('')
+
   const sendMessage = async () => {
-alert(message)
+    try {
+      const { data } = await axios.post(ADD_MESSAGES_ROUTE, {
+        to:currentChatUser?.id,
+        from:userInfo?.id, 
+        message, 
+      })
+      //set message to empty string after sending message
+      setMessage("")
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -32,7 +45,6 @@ alert(message)
           />
           {/* <FaMicrophone className='text-panel-header-icon cursor-pointer text-xl' title='Record'/> */}
         </button>
-
       </div>
       </>
     </div>

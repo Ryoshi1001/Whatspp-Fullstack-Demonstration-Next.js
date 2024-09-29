@@ -15,13 +15,13 @@ const ChatListHeader = () => {
     })
   }
 
-  console.log({userInfo})
   return (
     <div className='flex justify-between items-center h-16 px-4 py-3'>
       <div className='cursor-pointer'>
         <Avatar 
         type={"sm"} 
-        image={userInfo?.profileImage}/>
+        image={userInfo?.profileImage}
+        />
       </div>
       <div className='flex gap-6'>
         <BsFillChatLeftTextFill

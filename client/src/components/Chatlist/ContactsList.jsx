@@ -15,7 +15,6 @@ const ContactsList = () => {
     const getContacts = async () => {
       try {
         const { data } = await axios.get(GET_ALL_CONTACTS);
-        console.log('data', data);
         if (data && data.usersGroupedByInitialLetter) {
           setAllContacts(data.usersGroupedByInitialLetter);
         } else {
