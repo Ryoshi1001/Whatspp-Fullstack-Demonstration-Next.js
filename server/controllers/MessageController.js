@@ -58,13 +58,15 @@ export const getMessages = async (req, res, next) => {
 
     //array made checking and looping through messages from query: checking if status is not read and senderId is form "to" then mark message as "read"
     const unreadMessages = []; 
-    console.log(unreadMessages, to)
-    messages.forEach((message, index) => {
-      if (message.messageStatus !== "read" && message.senderId === parseInt(to)) {
+    messages.forEach = (message, index) => {
+      if (
+        message.messageStatus !== "read" && 
+        message.senderId === parseInt(to)
+      ) {
         messages[index].messageStatus = "read"; 
         unreadMessages.push(message.id)
       }
-    })
+    }
 
     //updating messages to read from delivered or sent
     await prisma.messages.updateMany({
@@ -75,7 +77,6 @@ export const getMessages = async (req, res, next) => {
         messageStatus: "read", 
       }, 
     })
-
     res.status(200).json({ messages })
   } catch (error) {
     console.log("getMessages Controller Error:", error); 

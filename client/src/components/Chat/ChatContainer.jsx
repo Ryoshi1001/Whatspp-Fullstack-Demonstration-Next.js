@@ -4,7 +4,8 @@ import React from 'react'
 import MessageStatus from '../common/MessageStatus';
 
 const ChatContainer = () => {
-  const [{messages, currentChatUser, userInfo}] = useStateProvider(); 
+  const [{messages, currentChatUser, userInfo}] = 
+  useStateProvider(); 
 
   return (
     <div className='w-full h-[80vh] relative flex-grow overflow-auto custom-scrollbar'>
@@ -19,11 +20,14 @@ const ChatContainer = () => {
               return (
                <div
                key={message.id}
-               className={`flex ${message.senderId === currentChatUser.id ? "justify-start" : "justify-end"} mt-2 z-10 opacity-95 relative`}
+               className={`${message.senderId === currentChatUser.id ? "justify-start" : "justify-end"} mt-2 z-10 opacity-95 relative flex`}
                >
                 {message.type === "text" && (
                   <div
-                  className={`text-white px-2 py-[10px] text-sm rounded-md flex gap-2 items-end max-w-[45%] ${message.senderId === currentChatUser.id ? "bg-incoming-background" : "bg-outgoing-background"}`}
+                  className={`text-white px-2 py-[10px] text-sm rounded-md flex gap-2 items-end max-w-[45%] 
+                    ${message.senderId === currentChatUser.id 
+                      ? "bg-incoming-background" 
+                      : "bg-outgoing-background"}`}
                   >
                     <span className='break-all'>{message.message}</span>
                     <div className='flex gap-1 items-end'>
