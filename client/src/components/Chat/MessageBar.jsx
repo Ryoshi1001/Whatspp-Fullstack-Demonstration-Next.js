@@ -2,41 +2,82 @@ import { reducerCases } from '@/context/constants';
 import { useStateProvider } from '@/context/StateContext';
 import { ADD_MESSAGE_ROUTE } from '@/utils/ApiRoutes';
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BsEmojiSmile } from 'react-icons/bs';
 import { ImAttachment } from 'react-icons/im';
 import { MdSend } from 'react-icons/md';
 
 const MessageBar = () => {
-  const [{ userInfo, currentChatUser, socket }, dispatch] = useStateProvider(); 
+  const [{ userInfo, currentChatUser, socket }, dispatch] = useStateProvider();
   const [message, setMessage] = useState('');
 
+  useEffect(() => {
+    if (socket && socket.current) {
+      socket.current.on('connect', () => {
+        console.log('Connected to WebSocket');
+      });
+
+      socket.current.on('disconnect', () => {
+        console.log('Disconnected from WebSocket');
+      });
+    }
+  }, [socket]);
+
   const sendMessage = async () => {
+    if (!message.trim()) return;
     try {
       const { data } = await axios.post(ADD_MESSAGE_ROUTE, {
         to: currentChatUser?.id,
         from: userInfo?.id, 
         message,
       });
-        socket.current.emit('send-msg', {
-          to: currentChatUser?.id, 
-          from: userInfo?.id, 
-          message: data.message, 
-        });
+  
+      socket.current.emit('send-msg', {
+        to: currentChatUser?.id, 
+        from: userInfo?.id, 
+        message: data.msg, 
+      });
+      console.log("Message sent:", data.msg);
+
+
       
       dispatch({
         type: reducerCases.ADD_MESSAGE,
         newMessage: {
-          ...data.message
-        }, 
-        fromSelf: true, 
-      })
-      // Clear the input field after sending
+          ...data.msg,
+          fromSelf: true,
+        },
+      });
       setMessage("");
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error("Error sending message:", error.response?.data?.error || error.message);
     }
   };
+
+  useEffect(() => {
+    const inputElement = document.querySelector('input[type="text"]');
+    if (inputElement) {
+      inputElement.addEventListener('focus', () => {
+        if (socket && socket.current) {
+          socket.current.emit('cursor-focus', { userId: userInfo.id });
+        }
+      });
+
+      inputElement.addEventListener('blur', () => {
+        if (socket && socket.current) {
+          socket.current.emit('cursor-blur', { userId: userInfo.id });
+        }
+      });
+    }
+
+    return () => {
+      if (inputElement) {
+        inputElement.removeEventListener('focus', () => {});
+        inputElement.removeEventListener('blur', () => {});
+      }
+    };
+  }, [userInfo]);
+  
 
   return (
     <div className='bg-panel-header-background h-20 px-4 flex items-center justify-center gap-6 relative'>

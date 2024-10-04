@@ -41,10 +41,10 @@ const reducer = (state, action) => {
         ...state, 
         socket: action.socket, 
       }
-    case reducerCases.ADD_MESSAGE: 
+      case reducerCases.ADD_MESSAGE: 
       return {
         ...state, 
-        messages: [...state.messages, action.newMessage], 
+        messages: [...state.messages, action.newMessage].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)),
       }
     default:
       return state;

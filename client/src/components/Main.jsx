@@ -27,6 +27,8 @@ const Main = () => {
   }, [redirectLogin]);
 
   useEffect(() => {
+    
+
     const unsubscribe = onAuthStateChanged(
       firebaseAuth,
       async (currentUser) => {
@@ -38,6 +40,8 @@ const Main = () => {
           const { data } = await axios.post(CHECK_USER_ROUTE, {
             email: currentUser.email,
           });
+
+          console.log(data)
 
           if (!data.status) {
             router.push('/login');
@@ -74,8 +78,17 @@ const Main = () => {
   //store socket in reducers
   useEffect(() => {
     if (userInfo) {
-      socket.current = io(HOST); 
-      socket.current.emit("add-user", userInfo.id);
+      socket.current = io(HOST, {
+        withCredentials: true,
+        transports: ['websocket']
+      });
+      socket.current.on('connect', () => {
+        console.log("Socket connected:", socket.current.connected);
+        socket.current.emit("add-user", userInfo.id);
+      });
+      socket.current.on('connect_error', (error) => {
+        console.error("Socket connection error:", error);
+      });
       dispatch({
         type: reducerCases.SET_SOCKET,
         socket,
@@ -89,17 +102,18 @@ const Main = () => {
 
   useEffect(() => {
     if (socket.current && !socketEvent) {
-      socket.current.on("msg-received", (data) => {
+      socket.current.on("msg-receive", (data) => {
         dispatch({
           type: reducerCases.ADD_MESSAGE, 
           newMessage: {
-            ...data.message, 
+            ...data, 
+            fromSelf: false,
           }
-        })
-      })
-      setSocketEvent(true)
+        });
+      });
+      setSocketEvent(true);
     }
-  }, [socket.current])
+  }, [socket.current, dispatch]);
 
  
   useEffect(() => {

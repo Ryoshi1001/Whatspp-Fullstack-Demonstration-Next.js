@@ -34,6 +34,5 @@ model Messages {
   message String
   messageStatus String @default("sent")
   createdAt DateTime @default(now())
+  @@unique([senderId, receiverId, createdAt, message])
 }
-
-
