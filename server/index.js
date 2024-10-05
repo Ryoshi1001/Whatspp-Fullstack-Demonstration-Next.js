@@ -1,5 +1,5 @@
 // https://www.youtube.com/watch?v=keYFkLycaDg 
-// 5:22 mins
+// 5:30 mins
 import dotenv from 'dotenv'
 dotenv.config()
 import express from 'express'
@@ -12,16 +12,18 @@ import MessageRoutes from './routes/MessageRoutes.js'
 
 const app = express(); 
 
-// app.use(cors());
+app.use(cors());
 
-
-app.use(cors({
-  origin: 'http://localhost:3000', // or whatever your client's URL is
-  methods: ['GET', 'POST'],
-  credentials: true
-}));
+// app.use(cors({
+//   origin: 'http://localhost:3000', // or whatever your client's URL is
+//   methods: ['GET', 'POST'],
+//   credentials: true
+// }));
 
 app.use(express.json())
+
+//provides images form uploads pointing route to directory
+app.use("/uploads/images", express.static("uploads/images"))
 
 //use routes in app
 //add routes for auth routes

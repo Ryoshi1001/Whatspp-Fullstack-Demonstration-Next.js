@@ -7,7 +7,7 @@ function ContextMenu({ options, coordinates, contextMenu, setContextMenu }) {
   useEffect(() => {
     const handleOutsideClick = (e) => {
       if (e.target.id !== "context-opener") {
-        if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
+        if (contextMenuRef.current && !contextMenuRef.current.contains(e.target)) {
           setContextMenu(false)
         }
       }
@@ -24,6 +24,7 @@ function ContextMenu({ options, coordinates, contextMenu, setContextMenu }) {
     setContextMenu(false); 
     callback();
   };
+
   return (
     <div
       className={`bg-dropdown-background fixed py-2 z-[100] shadow-xl`}

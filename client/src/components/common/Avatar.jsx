@@ -13,11 +13,12 @@ function Avatar({ type, image, setImage }) {
     x: 0,
     y: 0,
   });
-
   //state for contextMenuOptions name: 
   const [grabPhoto, setGrabPhoto] = useState(false)
   const [showPhotoLibrary, setShowPhotoLibrary] = useState(false)
   const [showCapturePhoto, setShowCapturePhoto] = useState(false)
+
+
 
   const contextMenuOptions = [
     {name: "Take Photo", callback: () => {
@@ -89,6 +90,7 @@ function Avatar({ type, image, setImage }) {
           <div className="relative h-14 w-14">
             <Image
               src={image}
+              priority={true}
               alt="avatar drawing"
               className="rounded-full"
               sizes='56px' //10*4 for retina displays
@@ -134,6 +136,7 @@ function Avatar({ type, image, setImage }) {
               <Image
                 src={image}
                 alt="avatar drawing"
+                priority={true}
                 className="rounded-full"
                 sizes='240px' //10*4 for retina displays
                 fill
