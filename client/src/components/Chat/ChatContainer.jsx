@@ -4,6 +4,11 @@ import React, { useEffect } from 'react';
 import MessageStatus from '../common/MessageStatus';
 import { reducerCases } from '@/context/constants';
 import ImageMessage from './ImageMessage';
+import dynamic from 'next/dynamic'
+
+const VoiceMessage = dynamic(() => import("./VoiceMessage"), {
+  ssr: false
+})
 
 const ChatContainer = () => {
   const [{ messages, currentChatUser, userInfo, socket }, dispatch] =
@@ -41,7 +46,7 @@ const ChatContainer = () => {
           <div className="flex flex-col justify-end w-full gap-1 overflow-auto mx-10 my-6 z-20 relative left-0 bottom-0">
             {messages.map((message) => (
               <div
-                key={message.id} // Use message.id directly since it is present
+                key={message.id}
                 className={`${
                   message.senderId === currentChatUser.id
                     ? 'justify-start'
@@ -71,6 +76,9 @@ const ChatContainer = () => {
                 )}
                 {message.type === "image"  && (
                   <ImageMessage message={message}/>
+                )}
+                {message.type === "audio" && (
+                  <VoiceMessage message={message}/>
                 )}
               </div>
             ))}

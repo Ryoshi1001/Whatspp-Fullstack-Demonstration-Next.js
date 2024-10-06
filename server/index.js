@@ -1,5 +1,6 @@
 // https://www.youtube.com/watch?v=keYFkLycaDg 
-// 5:30 mins
+// 6:34 mins
+// nextjs tailwind socket io firebase express nodejs prisma postgresql
 import dotenv from 'dotenv'
 dotenv.config()
 import express from 'express'
@@ -22,8 +23,9 @@ app.use(cors());
 
 app.use(express.json())
 
-//provides images form uploads pointing route to directory
+//provides images form uploads pointing route to directory also audio
 app.use("/uploads/images", express.static("uploads/images"))
+app.use("/uploads/recordings", express.static("uploads/recordings"))
 
 //use routes in app
 //add routes for auth routes
