@@ -4,7 +4,7 @@ export default function Document() {
   return (
     <Html>
       <Head/>
-      <body className='bg-red-100'>
+      <body>
         <Main/>
         <NextScript/>
         <div id='photo-picker-element'></div>

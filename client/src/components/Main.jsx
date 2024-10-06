@@ -10,16 +10,18 @@ import { CHECK_USER_ROUTE, GET_MESSAGES_ROUTE, HOST } from '@/utils/ApiRoutes';
 import { reducerCases } from '@/context/constants';
 import Chat from './Chat/Chat';
 import { io } from 'socket.io-client';
+import SearchMessages from './Chat/SearchMessages';
 
 const Main = () => {
   //checking for userInfo in Main first because undefined in nested ChatList: problem with loading avatar in child component. Using method from Firebase: onAuthStateChanged(firebaseAth, ) like a useEffect Hook for Firebase.
   const router = useRouter();
+  const [{ userInfo, currentChatUser, messagesSearch }, dispatch] =
+    useStateProvider();
   const [redirectLogin, setRedirectLogin] = useState(false);
-  const [{ userInfo, currentChatUser }, dispatch] = useStateProvider();
-  const [socketEvent, setSocketEvent] = useState(false)
+  const [socketEvent, setSocketEvent] = useState(false);
   //ref for socket io
-  const socket = useRef()
-  
+  const socket = useRef();
+
   useEffect(() => {
     if (redirectLogin) {
       router.push('/login');
@@ -27,8 +29,6 @@ const Main = () => {
   }, [redirectLogin]);
 
   useEffect(() => {
-    
-
     const unsubscribe = onAuthStateChanged(
       firebaseAuth,
       async (currentUser) => {
@@ -41,7 +41,7 @@ const Main = () => {
             email: currentUser.email,
           });
 
-          console.log(data)
+          console.log(data);
 
           if (!data.status) {
             router.push('/login');
@@ -67,8 +67,8 @@ const Main = () => {
             });
           }
         }
-        }
-      );
+      }
+    );
 
     return () => unsubscribe();
   }, [userInfo, dispatch]);
@@ -80,14 +80,14 @@ const Main = () => {
     if (userInfo) {
       socket.current = io(HOST, {
         withCredentials: true,
-        transports: ['websocket']
+        transports: ['websocket'],
       });
       socket.current.on('connect', () => {
-        console.log("Socket connected:", socket.current.connected);
-        socket.current.emit("add-user", userInfo.id);
+        console.log('Socket connected:', socket.current.connected);
+        socket.current.emit('add-user', userInfo.id);
       });
       socket.current.on('connect_error', (error) => {
-        console.error("Socket connection error:", error);
+        console.error('Socket connection error:', error);
       });
       dispatch({
         type: reducerCases.SET_SOCKET,
@@ -96,49 +96,59 @@ const Main = () => {
     }
   }, [userInfo]);
 
-
   //check if socket.current has value and is false
   // if (socket.current && !socket.current)
 
   useEffect(() => {
     if (socket.current && !socketEvent) {
-      socket.current.on("msg-receive", (data) => {
+      socket.current.on('msg-receive', (data) => {
         dispatch({
-          type: reducerCases.ADD_MESSAGE, 
+          type: reducerCases.ADD_MESSAGE,
           newMessage: {
-            ...data, 
+            ...data,
             fromSelf: false,
-          }
+          },
         });
       });
       setSocketEvent(true);
     }
   }, [socket.current, dispatch]);
 
- 
   useEffect(() => {
     const getMessages = async () => {
       try {
-        const { data: { messages } } = await axios.get(`${GET_MESSAGES_ROUTE}/${userInfo.id}/${currentChatUser.id}`); 
+        const {
+          data: { messages },
+        } = await axios.get(
+          `${GET_MESSAGES_ROUTE}/${userInfo.id}/${currentChatUser.id}`
+        );
         dispatch({
-          type: reducerCases.SET_MESSAGES, 
-          messages
-        })
+          type: reducerCases.SET_MESSAGES,
+          messages,
+        });
       } catch (error) {
-        console.error("Error fetching messages:", error)
+        console.error('Error fetching messages:', error);
       }
-    }
+    };
     if (currentChatUser?.id && userInfo?.id) {
-        getMessages(); 
+      getMessages();
     }
-  }, [currentChatUser])
-  
+  }, [currentChatUser]);
 
   return (
     <>
       <div className="grid grid-cols-main w-screen h-screen max-h-screen max-w-screen overflow-hidden">
         <ChatList />
-        {currentChatUser ? <Chat /> : <Empty /> }
+        {currentChatUser ? (
+          <div className={messagesSearch ? "grid grid-cols-2" : "grid-cols-2"}>
+            <Chat />
+            {
+            messagesSearch && <SearchMessages/> 
+            }
+          </div>
+        ) : (
+          <Empty />
+        )}
       </div>
     </>
   );
