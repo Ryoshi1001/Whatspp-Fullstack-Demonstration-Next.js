@@ -52,7 +52,7 @@ const SearchMessages = () => {
               </div>
             </div>
           </div>
-          <span className="mt-10 text-secondary">
+          <span className="mt-10 text-secondary px-5 text-center">
             {!searchTerm.length &&
               `Search for messages with ${currentChatUser.name}`}
           </span>
