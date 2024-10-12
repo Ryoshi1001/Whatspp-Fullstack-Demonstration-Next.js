@@ -2,21 +2,39 @@ import { reducerCases } from '@/context/constants';
 import { useStateProvider } from '@/context/StateContext';
 import { GET_ALL_CONTACTS } from '@/utils/ApiRoutes';
 import axios from 'axios';
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BiArrowBack, BiSearchAlt2 } from 'react-icons/bi';
 import ChatListItem from './ChatListItem';
 
 const ContactsList = () => {
   const [allContacts, setAllContacts] = useState({});
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchContacts, setSearchContacts] = useState({});
   const [{}, dispatch] = useStateProvider();
-  //when component is added get all contacts from Api with useEffect
+
+  // When search terms are changed
+  useEffect(() => {
+    if (searchTerm.length) {
+      const filteredData = {};
+      Object.keys(allContacts).forEach((key) => {
+        filteredData[key] = allContacts[key].filter((obj) =>
+          obj.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      });
+      setSearchContacts(filteredData);
+    } else {
+      setSearchContacts(allContacts);
+    }
+  }, [searchTerm, allContacts]);
+
+  // When component is added get all contacts from API with useEffect
   useEffect(() => {
     const getContacts = async () => {
       try {
         const { data } = await axios.get(GET_ALL_CONTACTS);
         if (data && data.usersGroupedByInitialLetter) {
           setAllContacts(data.usersGroupedByInitialLetter);
+          setSearchContacts(data.usersGroupedByInitialLetter);
         } else {
           console.log('Unexpected data structure', data);
           setAllContacts({});
@@ -46,8 +64,7 @@ const ContactsList = () => {
       </div>
 
       <div
-        className="bg-search-input-container-background 
-      h-full flex-auto overflow-auto custom-scrollbar"
+        className="bg-search-input-container-background h-full flex-auto overflow-auto custom-scrollbar"
       >
         <div className="flex py-3 items-center gap-3 h-14">
           <div className="bg-panel-header-background flex items-center gap-5 px-3 py-1 rounded-lg flex-grow mx-4">
@@ -59,27 +76,31 @@ const ContactsList = () => {
                 type="text"
                 placeholder="Search contacts"
                 className="bg-transparent text-sm focus:outline-none text-white w-full"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
           </div>
         </div>
-        {Object.keys(allContacts).length > 0 ? (
-          Object.entries(allContacts).map(([initialLetter, userList]) => (
-            <div key={initialLetter} className="">
-              <div className="text-teal-light pl-10 py-5">{initialLetter}</div>
-              {
-                userList.map((contact) => {
-                  return (
+
+        {Object.keys(searchContacts).length > 0? (
+          Object.entries(searchContacts).map(([initialLetter, userList]) => {
+            if (userList.length > 0) {
+              return (
+                <div key={initialLetter}>
+                  <div className="text-teal-light pl-10 py-5">{initialLetter}</div>
+                  {userList.map((contact) => (
                     <ChatListItem
-                    data={contact}
-                    isContactPage={true}
-                    key={contact.id}
+                      key={contact.id}
+                      data={contact}
+                      isContactsPage={true}
                     />
-                  )
-                })
-              }
-            </div>
-          ))
+                  ))}
+                </div>
+              );
+            }
+            return null;
+          })
         ) : (
           <div className="text-white text-center pt-5">No contacts found</div>
         )}

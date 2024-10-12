@@ -1,5 +1,5 @@
 // https://www.youtube.com/watch?v=keYFkLycaDg 
-// 7:31 mins
+// 8.00 mins
 // nextjs tailwind socket io firebase express nodejs prisma postgresql
 import dotenv from 'dotenv'
 dotenv.config()
