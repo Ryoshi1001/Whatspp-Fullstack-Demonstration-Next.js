@@ -140,6 +140,7 @@ function Avatar({ type, image, setImage }) {
                 className="rounded-full"
                 sizes='240px' //10*4 for retina displays
                 fill
+                
               />
             </div>
           </div>

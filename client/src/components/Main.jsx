@@ -11,12 +11,26 @@ import { reducerCases } from '@/context/constants';
 import Chat from './Chat/Chat';
 import { io } from 'socket.io-client';
 import SearchMessages from './Chat/SearchMessages';
+import VideoCall from './Call/VideoCall';
+import VoiceCall from './Call/VoiceCall';
+import IncomingVideoCall from './common/IncomingVideoCall';
+import IncomingCall from './common/IncomingCall';
 
 const Main = () => {
   //checking for userInfo in Main first because undefined in nested ChatList: problem with loading avatar in child component. Using method from Firebase: onAuthStateChanged(firebaseAth, ) like a useEffect Hook for Firebase.
   const router = useRouter();
-  const [{ userInfo, currentChatUser, messagesSearch }, dispatch] =
-    useStateProvider();
+  const [
+    {
+      userInfo,
+      currentChatUser,
+      messagesSearch,
+      voiceCall,
+      videoCall,
+      incomingVideoCall,
+      incomingVoiceCall,
+    },
+    dispatch,
+  ] = useStateProvider();
   const [redirectLogin, setRedirectLogin] = useState(false);
   const [socketEvent, setSocketEvent] = useState(false);
   //ref for socket io
@@ -98,7 +112,6 @@ const Main = () => {
 
   //check if socket.current has value and is false
   // if (socket.current && !socket.current)
-
   useEffect(() => {
     if (socket.current && !socketEvent) {
       socket.current.on('msg-receive', (data) => {
@@ -110,6 +123,41 @@ const Main = () => {
           },
         });
       });
+
+      socket.current.on('incoming-voice-call', ({ from, roomId, callType }) => {
+        dispatch({
+          type: reducerCases.SET_INCOMING_VOICE_CALL,
+          incomingVoiceCall: {
+            ...from,
+            roomId,
+            callType,
+          },
+        });
+      });
+
+      socket.current.on('incoming-video-call', ({ from, roomId, callType }) => {
+        dispatch({
+          type: reducerCases.SET_INCOMING_VIDEO_CALL,
+          incomingVideoCall: {
+            ...from,
+            roomId,
+            callType,
+          },
+        });
+      });
+
+      socket.current.on('voice-call-rejected', () => {
+        dispatch({
+          type: reducerCases.END_CALL,
+        });
+      });
+
+      socket.current.on('video-call-rejected', () => {
+        dispatch({
+          type: reducerCases.END_CALL,
+        });
+      });
+
       setSocketEvent(true);
     }
   }, [socket.current, dispatch]);
@@ -137,19 +185,33 @@ const Main = () => {
 
   return (
     <>
-      <div className="grid grid-cols-main w-screen h-screen max-h-screen max-w-screen overflow-hidden">
-        <ChatList />
-        {currentChatUser ? (
-          <div className={messagesSearch ? "grid grid-cols-2" : "grid-cols-2"}>
-            <Chat />
-            {
-            messagesSearch && <SearchMessages/> 
-            }
-          </div>
-        ) : (
-          <Empty />
-        )}
-      </div>
+      {incomingVideoCall && (<IncomingVideoCall />)}
+      {incomingVoiceCall && (<IncomingCall />)}
+      {videoCall && (
+        <div className="h-screen w-screen max-h-full overflow-hidden">
+          <VideoCall />
+        </div>
+      )}
+      {voiceCall && (
+        <div className="h-screen w-screen max-h-full overflow-hidden">
+          <VoiceCall />
+        </div>
+      )}
+      {!videoCall && !voiceCall && (
+        <div className="grid grid-cols-main w-screen h-screen max-h-screen max-w-screen overflow-hidden">
+          <ChatList />
+          {currentChatUser ? (
+            <div
+              className={messagesSearch ? 'grid grid-cols-2' : 'grid-cols-2'}
+            >
+              <Chat />
+              {messagesSearch && <SearchMessages />}
+            </div>
+          ) : (
+            <Empty />
+          )}
+        </div>
+      )}
     </>
   );
 };

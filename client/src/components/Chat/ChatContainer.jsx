@@ -39,7 +39,7 @@ const ChatContainer = () => {
 
   return (
     <>
-      <div className="bg-fixed bg-chat-background w-full h-full absolute left-0 top-0 -z-10 opacity-5"></div>
+      <div className="bg-fixed bg-chat-background w-full h-full absolute left-0 top-0 -z-30"></div>
       
       <div className="w-full h-[80vh] relative flex-grow overflow-auto custom-scrollbar">
         <div className="flex w-full">

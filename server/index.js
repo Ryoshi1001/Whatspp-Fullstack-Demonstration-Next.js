@@ -1,5 +1,5 @@
 // https://www.youtube.com/watch?v=keYFkLycaDg 
-// 8.00 mins
+// 9:16 mins
 // nextjs tailwind socket io firebase express nodejs prisma postgresql
 import dotenv from 'dotenv'
 dotenv.config()
@@ -112,4 +112,76 @@ io.on("connection", (socket) => {
   socket.on("error", (error) => {
     console.error("Socket error:", error);
   });
+
+
+
+  socket.on("outgoing-voice-call", (data) => {
+    const sendUserSocket = onlineUsers.get(data.to); 
+    console.log("outgoingvoicecall", data, sendUserSocket)
+    if(sendUserSocket) {
+      socket.to(sendUserSocket).emit("incoming-voice-call", {
+        from: data.from,
+        roomId: data.roomId, 
+        callType: data.callType,  
+      })
+    }
+  })
+
+  socket.on("outgoing-video-call", (data) => {
+    const sendUserSocket = onlineUsers.get(data.to); 
+    console.log("outvideocall", data, sendUserSocket)
+    if(sendUserSocket) {
+      socket.to(sendUserSocket).emit("incoming-video-call", {
+        from: data.from,
+        roomId: data.roomId, 
+        callType: data.callType,  
+      })
+    }
+  })
+
+  //sockets for end reject call and videos 
+  // socket.on("reject-voice-call", (data) => {
+  //   const sendUserSocket = onlineUsers.get(data.from); 
+  //   if(sendUserSocket) {
+  //     socket.to(sendUserSocket).emit("voice-call-rejected")
+  //   }
+  // })
+
+  //with try catch and errors catch better code 
+  socket.on("reject-voice-call", (data) => {
+    try {
+      const sendUserSocket = onlineUsers.get(data.from);
+      if (sendUserSocket) {
+        socket.to(sendUserSocket).emit("voice-call-rejected");
+      } else {
+        console.log(`User ${data.from} not found or offline`);
+      }
+    } catch (error) {
+      console.error("Error in reject-voice-call index.js:", error);
+    }
+  });
+
+  //reject video when clicking reject closes senders video chat window also
+  socket.on("reject-video-call", (data) => {
+    try {
+      const sendUserSocket = onlineUsers.get(data.from);
+      if (sendUserSocket) {
+        socket.to(sendUserSocket).emit("video-call-rejected");
+      } else {
+        console.log(`User ${data.from} not found or offline`);
+      }
+    } catch (error) {
+      console.error("Error in reject-voice-call index.js:", error);
+    }
+  });
+
+  //this used for voice and video calls 
+  socket.on("accept-incoming-call", ({id}) => {
+    const sendUserSocket = onlineUsers.get(id); 
+    socket.to(sendUserSocket).emit("accept-call")
+  })
+
 });
+
+
+
