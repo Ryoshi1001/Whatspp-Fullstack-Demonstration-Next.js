@@ -1,4 +1,5 @@
 import getPrismaInstance from '../utils/PrismaClient.js';
+import { generateToken04 } from '../utils/TokenGenerator.js';
 
 //checkuser controller for login on login page
 export const checkUser = async (req, res, next) => {
@@ -67,3 +68,24 @@ export const getAllUsers = async (req, res, next) => {
     next(error)
   }
 }
+
+//TOKEN FOR ZEGOCLOUD 
+export const generateToken = (req, res, next) => {
+  try {
+    const appId = parseInt(process.env.ZEGO_APP_ID);
+    const serverSecret = process.env.ZEGO_SERVER_SECRET;
+    const userId = req.params.userId;
+    const effectiveTime = 3600;
+    const payLoad = "";
+
+    if (appId && serverSecret && userId) {
+      const token = generateToken04(appId, userId, serverSecret, effectiveTime, payLoad);
+      res.status(200).json({ token });
+    } else {
+      return res.status(400).send("User id, app id and server secret are required");
+    }
+  } catch (error) {
+    console.log("Error: generateToken function AuthController.js file", error);
+    next(error);
+  }
+};

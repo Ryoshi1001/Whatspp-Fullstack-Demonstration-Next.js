@@ -1,5 +1,5 @@
 import express from 'express'
-import { checkUser, getAllUsers, onBoardUser } from '../controllers/AuthController.js';
+import { checkUser, generateToken, getAllUsers, onBoardUser } from '../controllers/AuthController.js';
 
 const router = express.Router(); 
 
@@ -9,5 +9,8 @@ router.post('/check-user', checkUser);
 router.post('/onboard-user', onBoardUser)
 //router for getting all users in ChatContainer
 router.get('/get-contacts', getAllUsers)
+
+//route for tokens with ZegoCloud
+router.get("/generate-token/:userId", generateToken)
 
 export default router; 
