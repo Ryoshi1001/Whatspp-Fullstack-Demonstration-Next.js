@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '../common/Avatar';
 import { MdCall } from 'react-icons/md';
 import { IoVideocam } from 'react-icons/io5';
@@ -6,9 +6,33 @@ import { BiSearchAlt2 } from 'react-icons/bi';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { useStateProvider } from '@/context/StateContext';
 import { reducerCases } from '@/context/constants';
+import ContextMenu from '../common/ContextMenu';
 
 const ChatHeader = () => {
   const [{ currentChatUser }, dispatch] = useStateProvider();
+
+  const [contextMenuCoordinates, setContextMenuCoordinates] = useState({
+    x: 0,
+    y: 0,
+  });
+  const [isContextMenuVisible, setIsContextMenuVisible] = useState(false);
+
+  const showContextMenu = (e) => {
+    e.preventDefault();
+    setIsContextMenuVisible(true);
+    setContextMenuCoordinates({ x: e.pageX - 50, y: e.pageY + 20 });
+  };
+
+  const contextMenuOptions = [
+    {
+      name: 'Exit',
+      callback: async () => {
+        dispatch({
+          type: reducerCases.SET_EXIT_CHAT,
+        });
+      },
+    },
+  ];
 
   //roomId used by ZeggoCloud library
   const handleVoiceCall = () => {
@@ -53,11 +77,13 @@ const ChatHeader = () => {
       </div>
 
       <div className="flex gap-6">
-        <MdCall className="text-panel-header-icon cursor-pointer text-xl"
-        onClick={handleVoiceCall}
+        <MdCall
+          className="text-panel-header-icon cursor-pointer text-xl"
+          onClick={handleVoiceCall}
         />
-        <IoVideocam className="text-panel-header-icon cursor-pointer text-xl"
-        onClick={handleVideoCall}
+        <IoVideocam
+          className="text-panel-header-icon cursor-pointer text-xl"
+          onClick={handleVideoCall}
         />
         <BiSearchAlt2
           className="text-panel-header-icon cursor-pointer text-xl"
@@ -67,7 +93,19 @@ const ChatHeader = () => {
             })
           }
         />
-        <BsThreeDotsVertical className="text-panel-header-icon cursor-pointe text-xl" />
+        <BsThreeDotsVertical
+          className="text-panel-header-icon cursor-pointe text-xl cursor-pointer"
+          id="context-opener"
+          onClick={(e) => {showContextMenu(e)}}
+        />
+        {isContextMenuVisible && (
+          <ContextMenu
+            options={contextMenuOptions}
+            coordinates={contextMenuCoordinates}
+            contextMenu={isContextMenuVisible}
+            setContextMenu={setIsContextMenuVisible}
+          />
+        )}
       </div>
     </div>
   );

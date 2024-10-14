@@ -55,7 +55,7 @@ const Main = () => {
             email: currentUser.email,
           });
 
-          console.log(data);
+          console.log("user data", data);
 
           if (!data.status) {
             router.push('/login');

@@ -1,7 +1,6 @@
 import { reducerCases } from '@/context/constants';
 import { useStateProvider } from '@/context/StateContext';
 import { GET_CALL_TOKEN } from '@/utils/ApiRoutes';
-import { data } from 'autoprefixer';
 import axios from 'axios';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
@@ -45,45 +44,47 @@ const Container = ({ data }) => {
 
   //after getting token with useEffect above with getToken() intialize ZegoCloud
   useEffect(() => {
-    const startCall = () => {
+    const startCall = async () => {
       import('zego-express-engine-webrtc').then(
         async ({ ZegoExpressEngine }) => {
           const zg = new ZegoExpressEngine(
             parseInt(process.env.NEXT_PUBLIC_ZEGO_APP_ID),
             process.env.NEXT_PUBLIC_ZEGO_SERVER_SECRET
           );
-          // zg.enableHardwareDecoder(false);
-
           setZgVar(zg);
-
+  
           zg.on(
             'roomStreamUpdate',
             async (roomId, updateType, streamList, extendedData) => {
+              console.log('Room Stream Update:', { roomId, updateType, streamList });
               if (updateType === 'ADD') {
-                //user added to room elements
+                console.log('Adding remote stream');
                 const rmVideo = document.getElementById('remote-video');
-                const vd = document.createElement(
-                  data.callType === 'video' ? 'video' : 'audio'
-                );
-                //local browser methods not zegocloud
+                const vd = document.createElement(data.callType === 'video' ? 'video' : 'audio');
                 vd.id = streamList[0].streamID;
                 vd.autoplay = true;
-                vd.playsInLine = true;
+                vd.playsInline = true;
                 vd.muted = false;
                 if (rmVideo) {
                   rmVideo.appendChild(vd);
                 }
-                //telling zegocloud to start stream
                 zg.startPlayingStream(streamList[0].streamID, {
                   audio: true,
                   video: true,
-                }).then((stream) => (vd.srcObject = stream));
+                }).then((stream) => {
+                  console.log('Started playing stream', stream);
+                  vd.srcObject = stream;
+                }).catch(error => {
+                  console.error('Error starting stream:', error);
+                });
               } else if (
                 updateType === 'DELETE' &&
                 zg &&
                 localStream &&
+                publishStream &&
                 streamList[0].streamID
               ) {
+                console.log('Destroying stream', streamList[0].streamID);
                 zg.destroyStream(localStream);
                 zg.stopPublishingStream(streamList[0].streamID);
                 zg.logoutRoom(data.roomId.toString());
@@ -93,46 +94,62 @@ const Container = ({ data }) => {
               }
             }
           );
-          //log into zegocloud room
-          await zg.loginRoom(
-            data.roomId.toString(),
-            token,
-            { userID: userInfo.id.toString(), userName: userInfo.name },
-            { userUpdate: true }
-          );
-
-          //start for local video
-          const localStream = await zg.createStream({
-            camera: {
-              audio: true,
-              video: data.callType === 'video' ? true : false,
-            },
-          });
-          const localVideo = document.getElementById('local-audio');
-          const videoElement = document.createElement(
-            data.callType === 'video' ? 'video' : 'audio'
-          );
-          videoElement.id = 'video-local-zego';
-          videoElement.className = 'h-28 w-32';
-          videoElement.autoplay = true;
-          videoElement.muted = false;
-
-          videoElement.playsInline = true;
-
-          localVideo.appendChild(videoElement);
-          const td = document.getElementById('video-local-zego');
-          td.srcObject = localStream;
-          const streamID = '123' + Date.now();
-          setPublishStream(streamID);
-          setLocalStream(localStream);
-          zg.startPublishingStream(streamID, localStream);
+  
+          // Log into Zegocloud room
+          try {
+            await zg.loginRoom(
+              data.roomId.toString(),
+              token,
+              { userID: userInfo.id.toString(), userName: userInfo.name },
+              { userUpdate: true }
+            );
+            console.log('Logged into Zegocloud room successfully');
+          } catch (error) {
+            console.error('Error logging into Zegocloud room:', error);
+          }
+  
+          // Start for local video
+          let localStream;
+          try {
+            localStream = await zg.createStream({
+              camera: {
+                audio: true,
+                video: data.callType === 'video' ? true : false,
+              },
+            });
+            console.log('Created local stream successfully');
+            
+            if (localStream && zg) {
+              const localVideo = document.getElementById('local-audio');
+              const videoElement = document.createElement(data.callType === 'video' ? 'video' : 'audio');
+              videoElement.id = 'video-local-zego';
+              videoElement.className = 'h-28 w-32';
+              videoElement.autoplay = true;
+              videoElement.muted = false;
+              videoElement.playsInline = true;
+  
+              localVideo.appendChild(videoElement);
+              const td = document.getElementById('video-local-zego');
+              td.srcObject = localStream;
+              const streamID = '123' + Date.now();
+              setPublishStream(streamID);
+              setLocalStream(localStream);
+              zg.startPublishingStream(streamID, localStream);
+            } else {
+              console.error('Failed to initialize local stream or Zego instance');
+            }
+          } catch (error) {
+            console.error('Error creating local stream:', error);
+          }
         }
       );
     };
+  
     if (token) {
       startCall();
     }
   }, [token]);
+  
 
   const endCall = () => {
     const id = data.id;
@@ -156,6 +173,8 @@ const Container = ({ data }) => {
     dispatch({
       type: reducerCases.END_CALL,
     });
+    setLocalStream(undefined);
+  setPublishStream(undefined);
   };
   return (
     <div className="border-conversation-border border-l w-full bg-conversation-panel-background flex flex-col h-[100vh] overflow-hidden items-center justify-center text-white">
