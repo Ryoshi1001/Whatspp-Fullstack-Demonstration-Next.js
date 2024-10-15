@@ -158,6 +158,13 @@ const Main = () => {
         });
       });
 
+      socket.current.on("online-users", ({onlineUsers}) => {
+        dispatch({
+          type: reducerCases.SET_ONLINE_USERS, 
+          onlineUsers, 
+        })
+      })
+
       setSocketEvent(true);
     }
   }, [socket.current, dispatch]);
@@ -198,7 +205,7 @@ const Main = () => {
         </div>
       )}
       {!videoCall && !voiceCall && (
-        <div className="grid grid-cols-main w-screen h-screen max-h-screen max-w-screen overflow-hidden">
+        <div className="xs:grid xs:grid-cols-[30%_70%] grid grid-cols-main w-screen h-screen max-h-screen max-w-screen overflow-hidden">
           <ChatList />
           {currentChatUser ? (
             <div

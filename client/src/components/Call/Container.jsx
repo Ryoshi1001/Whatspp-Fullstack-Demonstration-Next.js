@@ -15,6 +15,18 @@ const Container = ({ data }) => {
 
   const [localStream, setLocalStream] = useState(undefined);
   const [publishStream, setPublishStream] = useState(undefined);
+  const [isMobileScreen, setIsMobileScreen] = useState(false)
+ 
+  const handleResize = () => {
+    setIsMobileScreen(window.innerWidth < 640)
+  }
+
+  useEffect(() => {
+    handleResize(); 
+
+    window.addEventListener("resize", handleResize);
+    window.removeEventListener("resize", handleResize)
+  }, [])
 
   //add use Effect to check if call can be accepted
   useEffect(() => {
@@ -177,9 +189,9 @@ const Container = ({ data }) => {
   setPublishStream(undefined);
   };
   return (
-    <div className="border-conversation-border border-l w-full bg-conversation-panel-background flex flex-col h-[100vh] overflow-hidden items-center justify-center text-white">
+    <div className="xs:py-24 border-conversation-border border-l w-full bg-conversation-panel-background flex flex-col h-[100vh] overflow-hidden items-center justify-center text-white">
       <div className="flex flex-col gap-3 items-center">
-        <span className="text-5xl">{data.name}</span>
+        <span className="xs:text-3xl text-5xl">{data.name}</span>
         <span className="text-lg">
           {callAccepted && data.callType !== 'video'
             ? 'On going call'
@@ -187,12 +199,12 @@ const Container = ({ data }) => {
         </span>
       </div>
       {(!callAccepted || data.callType === 'audio') && (
-        <div className="my-24">
+        <div className="xs:my-14 my-24">
           <Image
             src={data.profilePicture}
             alt="avatar"
-            height={300}
-            width={300}
+            height={isMobileScreen ? 200 : 300}
+            width={isMobileScreen ? 200 : 300}
             className="rounded-full"
           />
         </div>
@@ -203,7 +215,7 @@ const Container = ({ data }) => {
       </div>
 
       <div
-        className="h-16 w-16 bg-red-600 flex items-center justify-center rounded-full cursor-pointer"
+        className="h-auto w-auto p-4 bg-red-600 flex items-center justify-center rounded-full cursor-pointer"
         onClick={endCall}
       >
         <MdOutlineCallEnd className="text-3xl cursor-pointer" />

@@ -44,14 +44,14 @@ const ChatListHeader = () => {
   }
 
   return (
-    <div className='flex justify-between items-center h-16 px-4 py-3'>
+    <div className='xs:px-2 flex justify-between items-center h-16 px-4 py-3 flex-wrap'>
       <div className='cursor-pointer'>
         <Avatar 
         type={"sm"} 
         image={userInfo?.profileImage}
         />
       </div>
-      <div className='flex gap-6'>
+      <div className='xs:gap-3 xs:flex xs:justify-between flex gap-6'>
         <BsFillChatLeftTextFill
         className='text-panel-header-icon cursor-pointer text-xl'
         title='New Chat'

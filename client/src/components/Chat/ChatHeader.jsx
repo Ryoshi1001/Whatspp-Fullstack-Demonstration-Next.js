@@ -9,7 +9,7 @@ import { reducerCases } from '@/context/constants';
 import ContextMenu from '../common/ContextMenu';
 
 const ChatHeader = () => {
-  const [{ currentChatUser }, dispatch] = useStateProvider();
+  const [{ currentChatUser, onlineUsers }, dispatch] = useStateProvider();
 
   const [contextMenuCoordinates, setContextMenuCoordinates] = useState({
     x: 0,
@@ -61,7 +61,7 @@ const ChatHeader = () => {
 
   return (
     <div className="h-16 px-4 py-3 text-teal-light flex justify-between items-center bg-panel-header-background">
-      <div className="flex items-center justify-center gap-6">
+      <div className="xs:gap-3 xs:pr-3 flex items-center justify-center gap-6">
         <Avatar
           type={'sm'}
           image={
@@ -71,14 +71,18 @@ const ChatHeader = () => {
           }
         />
         <div className="flex flex-col">
-          <span className="text-primary-strong">{currentChatUser?.name}</span>
-          <span className="text-secondary text-sm">online/offline</span>
+          <span className="xs:text-[12px] text-primary-strong">{currentChatUser?.name}</span>
+          <span className="xs:text-[12px] text-secondary text-sm">
+            {
+              onlineUsers.includes(currentChatUser.id) ? "online" : "offline"
+            }
+          </span>
         </div>
       </div>
 
       <div className="flex gap-6">
         <MdCall
-          className="text-panel-header-icon cursor-pointer text-xl"
+          className=" text-panel-header-icon cursor-pointer text-xl"
           onClick={handleVoiceCall}
         />
         <IoVideocam

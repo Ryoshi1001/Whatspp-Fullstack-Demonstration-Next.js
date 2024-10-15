@@ -3,7 +3,7 @@ import { firebaseAuth } from '../utils/FirebaseConfig.js';
 import axios from 'axios';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import Image from 'next/image';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { useRouter } from 'next/router.js';
 import { useStateProvider } from '@/context/StateContext.jsx';
@@ -15,6 +15,22 @@ const login = () => {
 
   //setting state of user
   const [{userInfo, newUser}, dispatch] = useStateProvider();
+
+  const [isMobileScreen, setIsMobileScreen] = useState(false); 
+
+  const handleResize = () => {
+    setIsMobileScreen(window.innerWidth < 640)
+  }
+
+  useEffect(() => {
+    handleResize(); 
+
+    window.addEventListener("resize", handleResize); 
+
+    window.removeEventListener('resize', handleResize)
+  }, [])
+
+
 
   //useEffect 
   useEffect(() => {
@@ -76,17 +92,17 @@ const login = () => {
           src="/whatsapp.gif"
           alt="whatsapp logo animation"
           priority={true}
-          width={300}
-          height={300}
+          width={isMobileScreen ? 100 : 300}
+          height={isMobileScreen ? 100 : 300}
         />
-        <span className="text-7xl">Whatsapp</span>
+        <span className="xs:text-5xl text-7xl">Whatsapp</span>
       </div>
       <button
         className="flex items-center justify-center text-white bg-search-input-container-background p-5 rounded-lg gap-7"
         onClick={handleLogin}
       >
         <FcGoogle className="text-3xl" />
-        <span className="text-2xl">Login with Google</span>
+        <span className="xs:text-xl text-2xl">Login with Google</span>
       </button>
     </div>
   );

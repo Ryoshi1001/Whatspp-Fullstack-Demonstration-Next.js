@@ -165,13 +165,13 @@ const MessageBar = () => {
   }, [grabPhoto]);
 
   return (
-    <div className="bg-panel-header-background h-20 px-4 flex items-center justify-center gap-6 relative">
+    <div className="xs:h-16 xs:px-3 xs:pr-3 bg-panel-header-background h-20 px-4 flex items-center justify-center gap-6 relative">
       {
         !showAudioRecorder && (
           <>
-          <div className="flex items-center justify-center gap-6">
+          <div className="xs:flex-col flex items-center justify-center gap-6 xs:gap-3">
             <BsEmojiSmile
-              className="text-panel-header-icon cursor-pointer text-xl"
+              className="text-panel-header-icon cursor-pointer text-xl xs:text-sm"
               title="Emoji"
               id="emoji-modal-window"
               onClick={handleEmojiModal}
@@ -190,7 +190,7 @@ const MessageBar = () => {
               </div>
             )}
             <ImAttachment
-              className="text-panel-header-icon cursor-pointer text-xl"
+              className="text-panel-header-icon cursor-pointer text-xl xs:text-sm"
               title="Attach File"
               onClick={() => setGrabPhoto(true)}
             />
@@ -199,7 +199,7 @@ const MessageBar = () => {
             <input
               type="text"
               placeholder="Type a message"
-              className="bg-input-background text-sm focus:outline-none text-white px-5 h-10 rounded-lg py-4 w-full"
+              className="xs:px-2 bg-input-background text-sm focus:outline-none text-white px-5 h-10 rounded-lg py-4 w-full"
               onChange={(e) => setMessage(e.target.value)}
               value={message}
             />

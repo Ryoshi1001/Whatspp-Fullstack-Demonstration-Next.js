@@ -15,8 +15,22 @@ const onboarding = () => {
   const [about, setAbout] = useState('');
   const [image, setImage] = useState('/default_avatar.png');
 
+  const [isMobileScreen, setIsMobileScreen] = useState();
+
+  const handleResize = () => {
+    setIsMobileScreen(window.innerWidth < 640);
+  };
+
   useEffect(() => {
-  if (userInfo?.email && !newUser) {
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+
+    window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (userInfo?.email && !newUser) {
       router.push('/');
     }
   }, [newUser, userInfo]);
@@ -40,7 +54,7 @@ const onboarding = () => {
           dispatch({
             type: reducerCases.SET_USER_INFO,
             userInfo: {
-              id: data.user.id, 
+              id: data.user.id,
               name,
               email,
               profileImage: image,
@@ -68,28 +82,39 @@ const onboarding = () => {
       <div className="flex items-center justify-center gap-2">
         <Image
           src="/whatsapp.gif"
-          width={300}
-          height={300}
+          width={isMobileScreen ? 100 : 300}
+          height={isMobileScreen ? 100 : 300}
           alt="whatsapp logo animation"
           priority={true}
         />
-        <span className="text-7xl">Whatsapp</span>
+        <span className="xs:text-5xl text-7xl">Whatsapp</span>
       </div>
-      <h2 className="text-2xl">Create your profile</h2>
+      <h2 className="xs:text-lg text-2xl">Create your profile</h2>
       <div className="flex gap-6 mt-6 flex-row items-center justify-center">
-        <div className="flex flex-col items-center justify-center mt-5 gap-6 text-white">
-          <Input name="Display Name" state={name} setState={setName} label />
-          <Input name="About" state={about} setState={setAbout} label />
+        <div className="xs:gap-3 xs:mt-0 flex flex-col items-center justify-center mt-5 gap-6 text-white">
+          <div className="">
+            <Input name="Display Name" state={name} setState={setName} label />
+          </div>
+          <div>
+            <Input name="About" state={about} setState={setAbout} label />
+          </div>
+
           <div className="flex justify-center items-center">
             <button
-              className="flex items-center justify-center text-white bg-search-input-container-background p-5 rounded-lg gap-7"
+              className="xs:p-3 xs:mt-2 flex items-center justify-center text-white bg-search-input-container-background p-5 rounded-lg"
               onClick={onboardUserHandler}
             >
               Create Profile
             </button>
           </div>
         </div>
-        <Avatar type={'xl'} image={image} setImage={setImage} />
+        <div>
+          <Avatar
+            type={isMobileScreen ? 'lg' : 'xl'}
+            image={image}
+            setImage={setImage}
+          />
+        </div>
       </div>
     </div>
   );

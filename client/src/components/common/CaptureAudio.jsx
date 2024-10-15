@@ -204,16 +204,16 @@ const CaptureAudio = ({ hide }) => {
   };
 
   return (
-    <div className="w-full flex justify-end items-center text-2xl">
+    <div className="xs:justify-between w-full flex justify-end items-center text-2xl">
       <div className="pt-1">
         <FaTrash
-          className="text-panel-header-icon cursor-pointer"
+          className="xs:text-lg text-panel-header-icon cursor-pointer"
           onClick={() => hide()}
         />
       </div>
-      <div className="flex justify-center items-center text-white text-lg gap-3 mx-4 px-4 py-2 bg-search-input-container-background rounded-full drop-shadow-lg">
+      <div className="xs:px-0 w-full flex justify-center items-center text-white text-lg gap-3 mx-4 px-4 py-2 bg-search-input-container-background rounded-full drop-shadow-lg">
         {isRecording ? (
-          <div className="text-red-500 animate-pulse w-60 text-center">
+          <div className="xs:w-full xs:text-sm xs:flex xs:flex-row xs:gap-2 xs:items-center xs:justify-center text-red-500 animate-pulse w-60 text-center">
             Recording <span>{recordingDuration}s</span>
           </div>
         ) : (
@@ -238,7 +238,7 @@ const CaptureAudio = ({ hide }) => {
         )}
         <audio ref={audioRef} hidden />
       </div>
-      <div className='mr-4'>
+      <div className='xs: mr-2 mr-4'>
         {!isRecording ? (
           <FaMicrophone
             className="text-red-500 cursor-pointer"
@@ -254,7 +254,7 @@ const CaptureAudio = ({ hide }) => {
 
       <div>
         <MdSend
-          className="text-panel-header-icon cursor-pointer mr-4"
+          className="xs:mr-0 text-panel-header-icon cursor-pointer mr-4"
           title="send"
           onClick={sendRecording}
         />

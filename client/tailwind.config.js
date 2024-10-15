@@ -34,6 +34,9 @@ module.exports = {
       gridTemplateColumns: {
         main: "1fr 2.4fr", 
       }, 
+      screens: {
+        "xs": '0px' //custom size for mobile 0px to 640px
+      }, 
     },
   },
   plugins: [],

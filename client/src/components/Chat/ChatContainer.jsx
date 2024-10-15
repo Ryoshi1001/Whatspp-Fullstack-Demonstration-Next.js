@@ -43,7 +43,7 @@ const ChatContainer = () => {
       
       <div className="w-full h-[80vh] relative flex-grow overflow-auto custom-scrollbar">
         <div className="flex w-full">
-          <div className="flex flex-col justify-end w-full gap-1 overflow-auto mx-10 my-6 z-20 relative left-0 bottom-0">
+          <div className="xs:mx-4 xs:my-1 flex flex-col justify-end w-full gap-1 overflow-auto mx-10 my-6 z-20 relative left-0 bottom-0">
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -56,7 +56,7 @@ const ChatContainer = () => {
                 
                 {message.type === 'text' && (
                   <div
-                    className={`text-white px-2 py-[10px] text-sm rounded-md flex gap-2 items-end max-w-[45%] 
+                    className={`xs:py-2 xs:text-[12px] xs:max-w-[80%] xs:flex-col text-white px-2 py-[10px] text-sm rounded-md flex gap-2 items-end max-w-[45%] 
                 ${
                   message.senderId === currentChatUser.id
                     ? 'bg-incoming-background'

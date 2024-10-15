@@ -21,7 +21,6 @@ const logout = () => {
 
   return (
     <div className='bg-conversation-panel-background'>
-      coins
     </div>
   )
 }

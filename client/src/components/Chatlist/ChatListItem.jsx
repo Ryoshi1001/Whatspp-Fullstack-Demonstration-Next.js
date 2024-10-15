@@ -1,13 +1,31 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Avatar from '../common/Avatar';
 import { useStateProvider } from '@/context/StateContext';
 import { reducerCases } from '@/context/constants';
 import CalculateTime from '@/utils/CalculateTime';
 import MessageStatus from '../common/MessageStatus';
 import { FaCamera, FaMicrophone } from 'react-icons/fa';
+import { setPersistence } from 'firebase/auth';
 
 const ChatListItem = ({ data, isContactsPage = false }) => {
   const [{ userInfo, currentChatUser }, dispatch] = useStateProvider();
+  const [isMobileScreen, setIsMobileScreen] = useState(false); 
+
+  //resize of avatar for mobile function
+  const handleResize = () => {
+    setIsMobileScreen(window.innerWidth < 640); 
+  }; 
+
+  //useEffect to resize avatar for mobile
+  useEffect(() => {
+    handleResize(); 
+
+    window.addEventListener('resize', handleResize); 
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   const handleContactClick = () => {
     if (!isContactsPage) {
@@ -34,13 +52,15 @@ const ChatListItem = ({ data, isContactsPage = false }) => {
 
   return (
     <div
-      className={`flex cursor-pointer hover:bg-background-default-hover`}
+      className={`flex cursor-pointer hover:bg-background-default-hover xs:flex xs:flex-col xs:items-start`}
       onClick={handleContactClick}
     >
-      <div className="min-w-fit px-5 pt-3 pb-1">
-        <Avatar type="lg" image={data?.profilePicture} />
+      <div className="xs:px-2 min-w-fit px-5 pt-3 pb-1">
+        <Avatar className="xs:type-[sm]" image={data?.profilePicture}
+        type={isMobileScreen ? "sm" : 'lg'}
+        />
       </div>
-      <div className="min-h-full flex flex-col justify-center mt-3 pr-2 w-full">
+      <div className="xs:px-2 min-h-full flex flex-col justify-center mt-3 pr-2 w-full text-xs sm:text-sm">
         <div className="flex justify-between">
           <div>
             <span className="text-white">{data?.name}</span>

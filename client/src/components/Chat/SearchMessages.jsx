@@ -23,7 +23,7 @@ const SearchMessages = () => {
 
   return (
     <div className="border-conversation-border border-l w-full bg-conversation-panel-background flex flex-col z-30 max-h-screen">
-      <div className="h-16 px-4 py-5 flex gap-10 items-center bg-panel-header-background text-primary-strong">
+      <div className="xs:px-0 h-16 px-4 py-5 flex gap-10 items-center bg-panel-header-background text-primary-strong">
         <IoClose
           className="cursor-pointer text-icon-lighter text-2xl"
           onClick={() =>
@@ -32,14 +32,14 @@ const SearchMessages = () => {
             })
           }
         />
-        <span>Search Messages</span>
+        <span className='xs:text-[12px]'>Search Messages</span>
       </div>
       <div className="overflow-auto custom-scrollbar h-full">
         <div className="flex items-center flex-col w-full">
           <div className="flex px-5 items-center gap-3 h-14 w-full">
-            <div className="bg-panel-header-background flex items-center gap-5 px-3 py-1 rounded-lg flex-grow">
+            <div className="xs:gap-3 bg-panel-header-background flex items-center gap-5 px-3 py-1 rounded-lg flex-grow">
               <div>
-                <BiSearchAlt2 className="text-panel-header-icon cursor-pointer text-lg" />
+                <BiSearchAlt2 className="xs:text-sm text-panel-header-icon cursor-pointer text-lg" />
               </div>
               <div className="w-full">
                 <input
@@ -52,7 +52,7 @@ const SearchMessages = () => {
               </div>
             </div>
           </div>
-          <span className="mt-10 text-secondary px-5 text-center">
+          <span className="xs:text-sm mt-10 text-secondary px-5 text-center">
             {!searchTerm.length &&
               `Search for messages with ${currentChatUser.name}`}
           </span>

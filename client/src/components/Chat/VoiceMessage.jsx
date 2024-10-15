@@ -13,6 +13,19 @@ const VoiceMessage = ({ message }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentPlaybackTime, setCurrentPlaybackTime] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
+  const [isMobileScreen, setIsMobileScreen] = useState(); 
+
+  const handleSize = () => {
+    setIsMobileScreen(window.innerWidth < 640)
+  }
+
+  useEffect(() => {
+    handleSize()
+
+    window.addEventListener("resize", handleSize); 
+
+    window.removeEventListener("resize", handleSize); 
+  }, [])
 
   const waveFormRef = useRef(null);
   const waveform = useRef(null);
@@ -95,10 +108,10 @@ const VoiceMessage = ({ message }) => {
           message.senderId === currentChatUser.id
             ? 'bg-incoming-background'
             : 'bg-outgoing-background'
-        } flex items-center gap-5 rounded-lg text-white text-sm px-4 pr-2 py-4`}
+        } flex items-center gap-5 rounded-lg text-white text-sm px-4 pr-2 py-4 xs:max-w-[80%]`}
       >
           <div>
-            <Avatar type={'lg'} image={currentChatUser?.profilePicture} />
+            <Avatar type={isMobileScreen ? "sm" : "lg"} image={currentChatUser?.profilePicture} />
           </div>
           <div className="cursor-pointer text-xl">
             {!isPlaying ? (
