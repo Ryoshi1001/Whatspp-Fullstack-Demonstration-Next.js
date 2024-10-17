@@ -19,26 +19,30 @@ const ChatContainer = () => {
     const chatContainerRef = useRef(null)
 
   console.log('Rendered messages:', messages);
-  useEffect(() => {
-    if (socket.current) {
-      const handleNewMessage = (data) => {
-        console.log('Message received:', data);
-        dispatch({
-          type: reducerCases.ADD_MESSAGE,
-          newMessage: {
-            ...data.message,
-            fromSelf: data.from === userInfo.id,
-          },
-        });
-      };
 
-      socket.current.on('msg-receive', handleNewMessage);
+useEffect(() => {
+  if (socket.current) {
+    const handleNewMessage = (data) => {
+      console.log('Message received:', data);
+      dispatch({
+        type: reducerCases.ADD_MESSAGE,
+        newMessage: {
+          ...data.message,
+          fromSelf: data.from === userInfo.id,
+        },
+      });
+    };
 
-      return () => {
-        socket.current.off('msg-receive', handleNewMessage);
-      };
-    }
-  }, [socket, dispatch, userInfo]);
+    // Store the current socket reference in a variable
+    const currentSocket = socket.current;
+
+    currentSocket.on('msg-receive', handleNewMessage);
+
+    return () => {
+      currentSocket.off('msg-receive', handleNewMessage);
+    };
+  }
+}, [socket, dispatch, userInfo]);
 
   useEffect(() => {
     scrollToBottom(); 

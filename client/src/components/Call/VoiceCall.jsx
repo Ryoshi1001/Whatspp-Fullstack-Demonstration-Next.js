@@ -19,6 +19,7 @@ const VoiceCall = () => {
         roomId: voiceCall.roomId, 
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[voiceCall])
   
   return (

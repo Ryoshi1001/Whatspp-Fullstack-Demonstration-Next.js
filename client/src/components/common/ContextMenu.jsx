@@ -16,6 +16,7 @@ function ContextMenu({ options, coordinates, contextMenu, setContextMenu }) {
     return () => {
       document.removeEventListener('click', handleOutsideClick)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   
 

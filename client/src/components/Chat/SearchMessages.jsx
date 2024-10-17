@@ -10,16 +10,21 @@ const SearchMessages = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchedMessages, setSearchedMessages] = useState(['coins']);
 
-  //soon as have a searchTerm will filter out the messages in reducer context for messages using UseEffect hook 
+  //soon as have a searchTerm will filter out the messages in reducer context for messages using UseEffect hook
   useEffect(() => {
-    if(searchTerm) {
-      setSearchedMessages(messages.filter((message) => {
-        return message.type === "text" && message.message.includes(searchTerm)
-      }))
+    if (searchTerm) {
+      setSearchedMessages(
+        messages.filter((message) => {
+          return (
+            message.type === 'text' && message.message.includes(searchTerm)
+          );
+        })
+      );
     } else {
-      setSearchedMessages([])
+      setSearchedMessages([]);
     }
-  }, [searchTerm])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchTerm]);
 
   return (
     <div className="border-conversation-border border-l w-full bg-conversation-panel-background flex flex-col z-30 max-h-screen">
@@ -32,7 +37,7 @@ const SearchMessages = () => {
             })
           }
         />
-        <span className='xs:text-[12px]'>Search Messages</span>
+        <span className="xs:text-[12px]">Search Messages</span>
       </div>
       <div className="overflow-auto custom-scrollbar h-full">
         <div className="flex items-center flex-col w-full">
@@ -64,14 +69,19 @@ const SearchMessages = () => {
             </span>
           )}
           <div className="flex flex-col w-full h-full text-red-50">
-          {searchedMessages.map((message) => {
-            return (
-              <div className='flex cursor-pointer flex-col justify-center hover:bg-background-default-hover w-full px-5 border-b-[0.1px] border-secondary py-5'>
-                <div className='text-sm text-secondary'>{CalculateTime(message.createdAt)}</div>
-                <div className='text-icon-green'>{message.message}</div>
-              </div>
-            )
-          })}
+            {searchedMessages.map((message, index) => {
+              return (
+                <div
+                  key={index}
+                  className="flex cursor-pointer flex-col justify-center hover:bg-background-default-hover w-full px-5 border-b-[0.1px] border-secondary py-5"
+                >
+                  <div className="text-sm text-secondary">
+                    {CalculateTime(message.createdAt)}
+                  </div>
+                  <div className="text-icon-green">{message.message}</div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

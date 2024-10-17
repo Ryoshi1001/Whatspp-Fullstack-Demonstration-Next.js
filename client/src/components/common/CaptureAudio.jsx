@@ -70,6 +70,7 @@ const CaptureAudio = ({ hide }) => {
     if (waveForm) {
       handleStartRecording();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [waveForm]);
 
   //2. soon as getting the waveform we start recording here. Set some states to 0 and setIsRecording to true. Grabbing userMedia and setting it into audioRef.  Grabbing checks of data when data is available then pushing into chunks. When recorder stops changes chunks into audio/ogg codecs turns into a blob and then turning it into a audioURL. Then setting audioURL to audio. Then putting audio into the setRecordedAudio state. Also setting waveform with audioURL

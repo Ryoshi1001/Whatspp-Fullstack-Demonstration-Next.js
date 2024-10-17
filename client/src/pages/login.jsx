@@ -9,7 +9,7 @@ import { useRouter } from 'next/router.js';
 import { useStateProvider } from '@/context/StateContext.jsx';
 import { reducerCases } from '@/context/constants.js';
 
-const login = () => {
+const Login = () => {
   //using NextJS useRouter
   const router = useRouter();
 
@@ -38,6 +38,7 @@ const login = () => {
     if (userInfo?.id && !newUser) {
       router.push('/')
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo, newUser])
   
   const handleLogin = async () => {
@@ -108,4 +109,4 @@ const login = () => {
   );
 };
 
-export default login;
+export default Login;

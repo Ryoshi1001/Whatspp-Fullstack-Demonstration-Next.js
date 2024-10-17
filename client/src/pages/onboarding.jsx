@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
-const onboarding = () => {
+const Onboarding = () => {
   const router = useRouter();
   const [{ userInfo, newUser }, dispatch] = useStateProvider();
   const [name, setName] = useState(userInfo?.name || '');
@@ -33,6 +33,7 @@ const onboarding = () => {
     if (userInfo?.email && !newUser) {
       router.push('/');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newUser, userInfo]);
 
   const onboardUserHandler = async () => {
@@ -120,4 +121,4 @@ const onboarding = () => {
   );
 };
 
-export default onboarding;
+export default Onboarding;

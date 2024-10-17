@@ -94,6 +94,7 @@ const MessageBar = () => {
         console.log('Disconnected from WebSocket');
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
   const sendMessage = async () => {
@@ -150,6 +151,7 @@ const MessageBar = () => {
         inputElement.removeEventListener('blur', () => {});
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo]);
 
   useEffect(() => {

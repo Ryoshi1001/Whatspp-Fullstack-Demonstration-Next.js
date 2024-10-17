@@ -40,6 +40,7 @@ const Main = () => {
     if (redirectLogin) {
       router.push('/login');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [redirectLogin]);
 
   useEffect(() => {
@@ -83,8 +84,8 @@ const Main = () => {
         }
       }
     );
-
     return () => unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo, dispatch]);
 
   //useEffect when have userInfo: import io from socket.io.client
@@ -108,6 +109,7 @@ const Main = () => {
         socket,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo]);
 
   //check if socket.current has value and is false
@@ -167,6 +169,7 @@ const Main = () => {
 
       setSocketEvent(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket.current, dispatch]);
 
   useEffect(() => {
@@ -188,6 +191,7 @@ const Main = () => {
     if (currentChatUser?.id && userInfo?.id) {
       getMessages();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentChatUser]);
 
   return (

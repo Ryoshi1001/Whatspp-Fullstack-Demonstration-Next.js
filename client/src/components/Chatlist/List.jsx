@@ -29,6 +29,7 @@ const List = () => {
     if (userInfo?.id) {
       getContacts();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo]);
 
   return (

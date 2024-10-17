@@ -27,18 +27,14 @@ function PhotoLibrary({ setImage, hidePhotoLibrary }) {
         <div className="grid grid-cols-3 gap-16 justify-center items-center p-20 w-full">
           {images.map((image, index) => (
             <div
+              key={index}
               onClick={() => {
                 setImage(images[index]);
                 hidePhotoLibrary(false);
               }}
             >
-              <div className='w-24 h-24 flex items-center justify-center cursor-pointer relative'>
-                <Image
-                  key={index}
-                  src={image}
-                  alt="avatar drawings"
-                  fill
-                />
+              <div className="w-24 h-24 flex items-center justify-center cursor-pointer relative">
+                <Image src={image} alt="avatar drawings" fill />
               </div>
             </div>
           ))}
