@@ -1,5 +1,4 @@
-// https://www.youtube.com/watch?v=keYFkLycaDg 
-// 9:16 mins
+//app fixed
 // nextjs tailwind socket io firebase express nodejs prisma postgresql
 import dotenv from 'dotenv'
 dotenv.config()
