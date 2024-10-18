@@ -2,7 +2,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-   domains: ["me-whats-app.vercel.app", "localhost"],
+   domains: ["me_whats_app.vercel.app", "localhost"],
   }
  };
  
