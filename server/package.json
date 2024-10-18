@@ -5,8 +5,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "nodemon index.js"
-  },
+    "start": "node index.js"
+    },
   "dependencies": {
     "@prisma/client": "^5.19.1",
     "cors": "^2.8.5",
