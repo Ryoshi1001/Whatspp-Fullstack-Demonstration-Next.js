@@ -13,11 +13,6 @@ const app = express();
 
 app.use(cors());
 
-// app.use(cors({
-//   origin: 'http://localhost:3000', // or whatever your client's URL is
-//   methods: ['GET', 'POST'],
-//   credentials: true
-// }));
 
 app.use(express.json())
 
@@ -40,7 +35,7 @@ const server = app.listen(PORT, () => {
 //if hosting online change origin also for app 
 const io = new Server(server, {
   cors: {
-      origin: process.env.FRONTEND_URL || "http://localhost:3000", // Your React app's URL
+      origin: process.env.FRONTEND_URL || "http://localhost:3000", 
       methods: ["GET", "POST"],
       credentials: true,
   },
