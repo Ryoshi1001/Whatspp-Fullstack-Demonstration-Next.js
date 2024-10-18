@@ -11,7 +11,17 @@ import MessageRoutes from './routes/MessageRoutes.js'
 
 const app = express(); 
 
-app.use(cors());
+// app.use(cors());
+
+const allowedOrigins = [
+  'https://whatsapp-frontend-sand.vercel.app',
+  // Add other allowed origins if needed
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true, // Allow cookies and authentication
+}));
 
 
 app.use(express.json())
