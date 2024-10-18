@@ -37,6 +37,7 @@ const Container = ({ data }) => {
         setCallAccepted(true);
       }, 1000);
     }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   useEffect(() => {
@@ -54,6 +55,7 @@ const Container = ({ data }) => {
       }
     };
     getToken();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [callAccepted]);
 
   //after getting token with useEffect above with getToken() intialize ZegoCloud
@@ -189,6 +191,7 @@ const Container = ({ data }) => {
       console.log(token);
       startCall();
     }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   const endCall = () => {
