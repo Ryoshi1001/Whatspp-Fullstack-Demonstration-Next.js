@@ -87,6 +87,7 @@ const Onboarding = () => {
           height={isMobileScreen ? 100 : 300}
           alt="whatsapp logo animation"
           priority={true}
+          property='unoptimized'
         />
         <span className="xs:text-5xl text-7xl">Whatsapp</span>
       </div>

@@ -1,5 +1,4 @@
-//app fixed
-// nextjs tailwind socket io firebase express nodejs prisma postgresql
+// NextJS, TailwindCSS, Socket.IO, FireBaseAuth, Express, NodeJS, PrismaSchema, PostgresQL
 import dotenv from 'dotenv'
 dotenv.config()
 import express from 'express'
@@ -192,6 +191,5 @@ io.on("connection", (socket) => {
   })
 
 });
-
 
 

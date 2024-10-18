@@ -93,6 +93,7 @@ const Login = () => {
           src="/whatsapp.gif"
           alt="whatsapp logo animation"
           priority={true}
+          property='unoptimized'
           width={isMobileScreen ? 100 : 300}
           height={isMobileScreen ? 100 : 300}
         />
